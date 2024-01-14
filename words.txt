@@ -1,6 +1,6 @@
-hello|привет|1
-dog|собака|2
+hello|привет|6
+dog|собака|5
 cat|кошка|3
-fox|лиса|4
-forest|лес|5
-mouse|мышь|6
+fox|лиса|3
+forest|лес|3
+mouse|мышь|3

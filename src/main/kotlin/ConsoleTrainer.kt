@@ -22,18 +22,26 @@ fun main() {
         val choice = readln().toIntOrNull() ?: continue
         when (choice) {
             1 -> {
-                do {
+                while (true) {
                     val listOfUnlearnedWords = dictionary.filter { it.countOfCorrectAnswer <= 3 }
+                    val listOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer > 3 }
                     if (listOfUnlearnedWords.isEmpty()) println("Вы выучили все слова")
                     else {
-                        val wordForLearning = listOfUnlearnedWords.random()
-                        val answers = listOfUnlearnedWords.shuffled().take(4)
+                        val answers: MutableList<Word> = listOfUnlearnedWords.shuffled().take(4).toMutableList()
+                        if (answers.size < 4) {
+                            answers.addAll(listOfLearnedWords.shuffled().take(4 - answers.size))
+                        }
+                        val wordForLearning = answers.random()
                         println(wordForLearning.translate)
-                        answers.forEach{ println(it.original)}
-                        val a = readln()
+                        answers.forEachIndexed { index, word -> println("${index + 1}. ${word.original}") }
+                        println("0. Выход в меню")
+                        val answerOfUser = readln().toInt()
+                        when (answerOfUser) {
+                            0 -> break
+                            in 1..4 -> TODO("Add functionality")
+                        }
                     }
-                } while (listOfUnlearnedWords.isNotEmpty())
-
+                }
             }
 
             2 -> {
@@ -48,3 +56,4 @@ fun main() {
     }
 
 }
+

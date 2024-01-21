@@ -16,20 +16,19 @@ fun main() {
     }
     println(dictionary)
 
-    val quantityOfCorrectAnswers = dictionary.filter { it.countOfCorrectAnswer >= 3 }
     while (true) {
         println("Меню: 1 – Учить слова, 2 – Статистика, 0 – Выход")
         val choice = readln().toIntOrNull() ?: continue
         when (choice) {
             1 -> {
                 while (true) {
-                    val listOfUnlearnedWords = dictionary.filter { it.countOfCorrectAnswer <= 3 }
-                    val listOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer > 3 }
+                    val listOfUnlearnedWords = dictionary.filter { it.countOfCorrectAnswer <= BOUNDARY_FOR_LEARNED_WORD }
                     if (listOfUnlearnedWords.isEmpty()) println("Вы выучили все слова")
                     else {
-                        val answers: MutableList<Word> = listOfUnlearnedWords.shuffled().take(4).toMutableList()
-                        if (answers.size < 4) {
-                            answers.addAll(listOfLearnedWords.shuffled().take(4 - answers.size))
+                        val answers: MutableList<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS).toMutableList()
+                        if (answers.size < NUMBER_OF_ANSWER_OPTIONS) {
+                            val listOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
+                            answers.addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
                         }
                         val wordForLearning = answers.random()
                         println(wordForLearning.translate)
@@ -45,9 +44,10 @@ fun main() {
             }
 
             2 -> {
+                val quantityOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer >= BOUNDARY_FOR_LEARNED_WORD }
                 val percentsOfCorrectAnswers =
-                    ((quantityOfCorrectAnswers.size.toDouble() / dictionary.size) * 100).toInt()
-                println("Выучено ${quantityOfCorrectAnswers.size} из ${dictionary.size} слов | ${percentsOfCorrectAnswers}%")
+                    ((quantityOfLearnedWords.size.toDouble() / dictionary.size) * 100).toInt()
+                println("Выучено ${quantityOfLearnedWords.size} из ${dictionary.size} слов | ${percentsOfCorrectAnswers}%")
             }
 
             0 -> return
@@ -57,3 +57,6 @@ fun main() {
 
 }
 
+
+const val BOUNDARY_FOR_LEARNED_WORD = 3
+const val NUMBER_OF_ANSWER_OPTIONS = 4

@@ -1,6 +1,20 @@
-hello|привет|1
-dog|собака|2
-cat|кошка|3
-fox|лиса|4
-forest|лес|5
-mouse|мышь|6
+apple|яблоко|4
+banana|банан|2
+cat|кот|6
+dog|собака|3
+elephant|слон|1
+flower|цветок|5
+guitar|гитара|2
+house|дом|4
+ice cream|мороженое|3
+jacket|куртка|1
+king|король|5
+lion|лев|2
+mountain|гора|4
+notebook|тетрадь|6
+orange|апельсин|3
+pencil|карандаш|1
+queen|королева|5
+rain|дождь|2
+sun|солнце|4
+tree|дерево|6

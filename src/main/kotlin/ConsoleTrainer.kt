@@ -22,23 +22,25 @@ fun main() {
         when (choice) {
             1 -> {
                 while (true) {
-                    val listOfUnlearnedWords = dictionary.filter { it.countOfCorrectAnswer <= BOUNDARY_FOR_LEARNED_WORD }
-                    if (listOfUnlearnedWords.isEmpty()) println("Вы выучили все слова")
-                    else {
-                        val answers: MutableList<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS).toMutableList()
-                        if (answers.size < NUMBER_OF_ANSWER_OPTIONS) {
-                            val listOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
-                            answers.addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
-                        }
-                        val wordForLearning = answers.random()
-                        println(wordForLearning.translate)
-                        answers.forEachIndexed { index, word -> println("${index + 1}. ${word.original}") }
-                        println("0. Выход в меню")
-                        val answerOfUser = readln().toInt()
-                        when (answerOfUser) {
-                            0 -> break
-                            in 1..4 -> TODO("Add functionality")
-                        }
+                    val listOfUnlearnedWords =
+                        dictionary.filter { it.countOfCorrectAnswer <= BOUNDARY_FOR_LEARNED_WORD }
+                    if (listOfUnlearnedWords.isEmpty()) {
+                        println("Вы выучили все слова")
+                        break
+                    }
+                    val answers: List<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS)
+                    if (answers.size < NUMBER_OF_ANSWER_OPTIONS) {
+                        val listOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
+                        answers.toMutableList().addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
+                    }
+                    val wordForLearning = answers.random()
+                    println(wordForLearning.translate)
+                    answers.forEachIndexed { index, word -> println("${index + 1}. ${word.original}") }
+                    println("0. Выход в меню")
+                    val answerOfUser = readln().toInt()
+                    when (answerOfUser) {
+                        0 -> break
+                        in 1..4 -> TODO("Add functionality")
                     }
                 }
             }

@@ -66,6 +66,7 @@ fun main() {
 
 }
 
+
 fun saveDictionary(dictionary: List<Word>) {
     val wordsFIle = File("words.txt")
     wordsFIle.readLines()
@@ -77,6 +78,7 @@ fun saveDictionary(dictionary: List<Word>) {
     }
     writer.close()
 }
+
 
 const val BOUNDARY_FOR_LEARNED_WORD = 3
 const val NUMBER_OF_ANSWER_OPTIONS = 4

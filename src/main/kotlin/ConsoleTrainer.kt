@@ -4,8 +4,6 @@ fun main() {
 
     val wordsFile = File("words.txt")
 
-    wordsFile.createNewFile()
-
     val lines = wordsFile.readLines()
 
     val dictionary: MutableList<Word> = mutableListOf()
@@ -14,7 +12,6 @@ fun main() {
         val word = Word(line[0], line[1], line[2].toInt())
         dictionary.add(word)
     }
-    println(dictionary)
 
     while (true) {
         println("Меню: 1 – Учить слова, 2 – Статистика, 0 – Выход")
@@ -41,7 +38,7 @@ fun main() {
                     println("0. Выход в меню")
                     when (val answerOfUser = readln().toInt()) {
                         0 -> break
-                        in 1..4 -> {
+                        in 1..NUMBER_OF_ANSWER_OPTIONS -> {
                             if (answerOfUser == (answers.indexOf(wordForLearning) + 1)) {
                                 wordForLearning.countOfCorrectAnswer++
                                 println("Правильно!")

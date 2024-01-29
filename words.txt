@@ -7,10 +7,10 @@ flower|цветок|0
 guitar|гитара|2
 house|дом|0
 ice cream|мороженое|0
-jacket|куртка|0
+jacket|куртка|1
 king|король|0
 lion|лев|2
-mountain|гора|2
+mountain|гора|3
 notebook|тетрадь|0
 orange|апельсин|0
 pencil|карандаш|1

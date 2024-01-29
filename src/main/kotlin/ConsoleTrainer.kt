@@ -47,6 +47,7 @@ fun main() {
                                 println("Правильно!")
                                 saveDictionary(dictionary)
                             }
+                            else println("Неверно!")
                         }
                     }
                 }

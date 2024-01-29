@@ -25,16 +25,18 @@ fun main() {
                         println("Вы выучили все слова")
                         break
                     }
-                    val answers: List<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS)
-                    if (answers.size < NUMBER_OF_ANSWER_OPTIONS) {
+                    var answers: List<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS)
+                    if (answers.size <= NUMBER_OF_ANSWER_OPTIONS) {
                         val listOfLearnedWords =
                             dictionary.filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
-                        answers.toMutableList()
-                            .addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
+
+                        val mutableListOfAnswers = answers.toMutableList()
+                        mutableListOfAnswers.addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
+                        answers = mutableListOfAnswers
                     }
                     val wordForLearning = answers.random()
                     println(wordForLearning.translate)
-                    answers.forEachIndexed { index, word -> println("${index + 1}. ${word.original}") }
+                    answers.forEachIndexed() { index, word -> println("${index + 1}. ${word.original}") }
                     println("0. Выход в меню")
                     when (val answerOfUser = readln().toInt()) {
                         0 -> break

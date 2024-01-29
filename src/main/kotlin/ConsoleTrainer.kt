@@ -46,8 +46,7 @@ fun main() {
                                 wordForLearning.countOfCorrectAnswer++
                                 println("Правильно!")
                                 saveDictionary(dictionary)
-                            }
-                            else println("Неверно!")
+                            } else println("Неверно!")
                         }
                     }
                 }
@@ -69,15 +68,14 @@ fun main() {
 
 
 fun saveDictionary(dictionary: List<Word>) {
-    val wordsFIle = File("words.txt")
-    wordsFIle.readLines()
+    val dictionaryFile = File("words.txt")
 
-    val writer = wordsFIle.bufferedWriter()
+    dictionaryFile.writeText("")
     for (i in dictionary) {
         val stringForWrite = "${i.original}|${i.translate}|${i.countOfCorrectAnswer}\n"
-        writer.write(stringForWrite)
+        dictionaryFile.appendText(stringForWrite)
     }
-    writer.close()
+
 }
 
 

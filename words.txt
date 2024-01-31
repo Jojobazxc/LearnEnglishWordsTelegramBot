@@ -1,20 +1,20 @@
 apple|яблоко|4
-banana|банан|2
-cat|кот|6
-dog|собака|3
-elephant|слон|1
+banana|банан|4
+cat|кот|4
+dog|собака|5
+elephant|слон|4
 flower|цветок|5
-guitar|гитара|2
+guitar|гитара|4
 house|дом|4
-ice cream|мороженое|3
-jacket|куртка|1
-king|король|5
-lion|лев|2
+ice cream|мороженое|4
+jacket|куртка|4
+king|король|4
+lion|лев|4
 mountain|гора|4
-notebook|тетрадь|6
-orange|апельсин|3
-pencil|карандаш|1
-queen|королева|5
+notebook|тетрадь|4
+orange|апельсин|4
+pencil|карандаш|4
+queen|королева|4
 rain|дождь|2
-sun|солнце|4
-tree|дерево|6
+sun|солнце|1
+tree|дерево|1

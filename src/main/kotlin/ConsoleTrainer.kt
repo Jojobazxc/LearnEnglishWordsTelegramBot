@@ -27,12 +27,10 @@ fun main() {
                     }
                     var answers: List<Word> = listOfUnlearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS)
                     if (answers.size <= NUMBER_OF_ANSWER_OPTIONS) {
-                        val listOfLearnedWords =
-                            dictionary.filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
-
-                        val mutableListOfAnswers = answers.toMutableList()
-                        mutableListOfAnswers.addAll(listOfLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS - answers.size))
-                        answers = mutableListOfAnswers
+                        answers = answers + dictionary
+                            .filter { it.countOfCorrectAnswer > BOUNDARY_FOR_LEARNED_WORD }
+                            .shuffled()
+                            .take(NUMBER_OF_ANSWER_OPTIONS - answers.size)
                     }
                     val wordForLearning = answers.random()
                     println(wordForLearning.translate)

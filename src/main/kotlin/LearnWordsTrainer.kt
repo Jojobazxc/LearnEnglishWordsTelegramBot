@@ -60,22 +60,14 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
     }
 
     private fun loadDictionary(): List<Word> {
-        val wordsFile = File(nameOfTextFile)
+        val wordsFile = File("words.txt")
 
         val lines = wordsFile.readLines()
         val dictionary: MutableList<Word> = mutableListOf()
         for (line in lines) {
-            if ((line.count { it == '|' } == 2)){
-                val line = line.split("|")
-                val word = Word(line[0], line[1], line.get(2).toIntOrNull()?:0)
-                dictionary.add(word)
-            }
-            else {
-                val copyLine = "$line|"
-                val parsingList = copyLine.split('|')
-                val word = Word(parsingList[0], parsingList[1], parsingList.get(2).toIntOrNull()?:0)
-                dictionary.add(word)
-            }
+            val line = line.split("|")
+            val word = Word(line[0], line[1], line.getOrNull(2)?.toIntOrNull() ?: 0)
+            dictionary.add(word)
         }
         return dictionary
     }

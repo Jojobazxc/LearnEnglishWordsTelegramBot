@@ -12,7 +12,7 @@ data class Question(
     val wordForLearning: Word
 )
 
-class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAnswers: Int) {
+class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAnswers: Int, private val nameOfTextFile: String) {
 
     private val dictionary = loadDictionary()
     private var question: Question? = null
@@ -32,7 +32,7 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
     fun getNextQuestion(): Question? {
         val listOfUnlearnedWords = dictionary.filter { it.countOfCorrectAnswer < boundaryForLearnedWords }
         var answers = listOfUnlearnedWords.shuffled().take(countOfAnswers)
-        if (answers.isEmpty()) return null
+        if (listOfUnlearnedWords.isEmpty()) return null
         if ((answers.size <= countOfAnswers)) {
             answers = answers + dictionary
                 .filter { it.countOfCorrectAnswer > boundaryForLearnedWords }
@@ -40,7 +40,6 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
                 .take(countOfAnswers - answers.size)
         }
         val wordForLearning = answers.random()
-        answers.shuffled()
         question = Question(
             listOfUnlearnedWords,
             answers,
@@ -61,20 +60,28 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
     }
 
     private fun loadDictionary(): List<Word> {
-        val wordsFile = File("words.txt")
+        val wordsFile = File(nameOfTextFile)
 
         val lines = wordsFile.readLines()
         val dictionary: MutableList<Word> = mutableListOf()
         for (line in lines) {
-            val line = line.split("|")
-            val word = Word(line[0], line[1], line[2].toInt())
-            dictionary.add(word)
+            if ((line.count { it == '|' } == 2)){
+                val line = line.split("|")
+                val word = Word(line[0], line[1], line.get(2).toIntOrNull()?:0)
+                dictionary.add(word)
+            }
+            else {
+                val copyLine = "$line|"
+                val parsingList = copyLine.split('|')
+                val word = Word(parsingList[0], parsingList[1], parsingList.get(2).toIntOrNull()?:0)
+                dictionary.add(word)
+            }
         }
         return dictionary
     }
 
     private fun saveDictionary(dictionary: List<Word>) {
-        val dictionaryFile = File("words.txt")
+        val dictionaryFile = File(nameOfTextFile)
 
         dictionaryFile.writeText("")
         for (word in dictionary) {

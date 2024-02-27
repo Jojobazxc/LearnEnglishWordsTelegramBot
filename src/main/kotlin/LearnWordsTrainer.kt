@@ -12,7 +12,11 @@ data class Question(
     val wordForLearning: Word
 )
 
-class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAnswers: Int, private val nameOfTextFile: String) {
+class LearnWordsTrainer(
+    private val boundaryForLearnedWords: Int,
+    val countOfAnswers: Int,
+    private val nameOfTextFile: String
+) {
 
     private val dictionary = loadDictionary()
     private var question: Question? = null
@@ -83,3 +87,10 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
 
     }
 }
+
+
+data class Word(
+    val original: String,
+    val translate: String,
+    var countOfCorrectAnswer: Int = 0,
+)

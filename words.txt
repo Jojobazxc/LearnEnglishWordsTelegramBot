@@ -18,7 +18,7 @@ Home|Дом|0
 School|Школа|0
 Friend|Друг|1
 Love|Любовь|0
-Book|Книга|2
+Book|Книга|3
 Pen|Ручка|0
 Paper|Бумага|1
 Table|Стол|1

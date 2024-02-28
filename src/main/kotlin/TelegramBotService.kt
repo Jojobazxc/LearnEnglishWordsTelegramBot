@@ -6,6 +6,8 @@ import java.net.http.HttpResponse
 
 class TelegramBotService(private val botToken: String) {
 
+    private val client: HttpClient = HttpClient.newBuilder().build()
+
     fun getUpdate(updateId: Int): String {
         val urlGetUpdates = "$TELEGRAM_BOT_API_BASE_URL$botToken/getUpdates?offset=$updateId"
         val client = HttpClient.newBuilder().build()
@@ -18,7 +20,6 @@ class TelegramBotService(private val botToken: String) {
     fun sendMessage(chatId: String?, textMessage: String?): String {
         val encodedText = URLEncoder.encode(textMessage, Charsets.UTF_8)
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage?chat_id=$chatId&text=$encodedText"
-        val client = HttpClient.newBuilder().build()
         val request = HttpRequest.newBuilder().uri(URI.create(urlSendMessage)).build()
         val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
@@ -48,7 +49,6 @@ class TelegramBotService(private val botToken: String) {
                 }
             }
         """.trimIndent()
-        val client = HttpClient.newBuilder().build()
         val request = HttpRequest.newBuilder().uri(URI.create(urlSendMessage))
             .header("Content-type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(sendMenuBody))
@@ -58,8 +58,12 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    fun sendQuestion(chatId: String?, question: Question): String? {
+    private fun sendQuestion(chatId: String?, question: Question): String? {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
+        val answers =
+            question.answers.mapIndexed { index, word -> "${index + 1} - ${word.translate}" }
+        println(question)
+        println(answers)
         val sendQuestion = """
             {
                 "chat_id": $chatId,
@@ -68,30 +72,33 @@ class TelegramBotService(private val botToken: String) {
                     "inline_keyboard": [
                         [
                             {
-                                "text": "${question.answers[0].translate}",
-                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 0}"
-                                
-                            },
-                            {
-                                "text": "${question.answers[1].translate}",
-                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 1}"                                
-                            }                        
+                                "text": "${answers[0]}",
+                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 0}"  
+                            }                   
                         ],
                         [
                             {
-                                "text": "${question.answers[2].translate}",
-                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 2}" 
-                            },
+                                "text": "${answers[1]}",
+                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 1}"  
+                            }
+                        ],
+                        [
                             {
-                                "text": "${question.answers[3].translate}",
-                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 3}" 
+                                "text": "${answers[2]}",
+                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 2}"  
+                            }
+                        ],
+                        [
+                            {
+                                "text": "${answers[3]}",
+                                "callback_data": "${CALLBACK_DATA_ANSWER_PREFIX + 3}"  
                             }
                         ]
                     ]
                 }
             }
         """.trimIndent()
-        val client = HttpClient.newBuilder().build()
+
         val request = HttpRequest.newBuilder().uri(URI.create(urlSendMessage))
             .header("Content-type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(sendQuestion))
@@ -102,8 +109,7 @@ class TelegramBotService(private val botToken: String) {
     }
 
     fun checkNextQuestionAndSend(trainer: LearnWordsTrainer, chatId: String?) {
-        if (trainer.getNextQuestion() == null) sendMessage(chatId, "Вы выучили все слова!")
-        else sendQuestion(chatId, trainer.getNextQuestion()!!)
+        trainer.getNextQuestion()?.let { sendQuestion(chatId, it) } ?: sendMessage(chatId, "Вы выучили все слова!")
     }
 }
 

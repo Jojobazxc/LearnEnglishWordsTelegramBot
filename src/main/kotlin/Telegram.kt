@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
     val chatIdRegex: Regex = "\"chat\":\\{\"id\":(\\d+)".toRegex()
     val dataRegex: Regex = "\"data\":\"(.+?)\"".toRegex()
 
-    val trainer = LearnWordsTrainer(3, 4, "words.txt")
+    val trainer = LearnWordsTrainer(3, 6, "words.txt")
     val statistics = trainer.getStatistics()
 
 
@@ -49,8 +49,10 @@ fun main(args: Array<String>) {
         if (data?.startsWith(CALLBACK_DATA_ANSWER_PREFIX) == true) {
             val userAnswerIndex = data.substringAfter(CALLBACK_DATA_ANSWER_PREFIX).toInt()
             if (trainer.checkUserAnswer(userAnswerIndex)) telegramBot.sendMessage(id, "Правильно!")
-            else telegramBot.sendMessage(id, "Неправильно")
-            telegramBot.checkNextQuestionAndSend(trainer, id)
+            else telegramBot.sendMessage(
+                id,
+                "Неправильно! ${trainer.question?.wordForLearning?.original} - это ${trainer.question?.wordForLearning?.translate}"
+            )
         }
 
     }

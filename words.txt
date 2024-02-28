@@ -21,12 +21,12 @@ Love|Любовь|0
 Book|Книга|3
 Pen|Ручка|0
 Paper|Бумага|1
-Table|Стол|1
+Table|Стол|2
 Chair|Стул|1
 Door|Дверь|0
 Window|Окно|0
 Car|Машина|1
-Bus|Автобус|0
+Bus|Автобус|1
 Train|Поезд|0
 Plane|Самолет|2
 Ship|Корабль|0

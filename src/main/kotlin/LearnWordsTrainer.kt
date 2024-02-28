@@ -19,7 +19,7 @@ class LearnWordsTrainer(
 ) {
 
     private val dictionary = loadDictionary()
-    private var question: Question? = null
+    var question: Question? = null
 
     fun getStatistics(): Statistics {
         val quantityOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer >= boundaryForLearnedWords }

@@ -12,10 +12,14 @@ data class Question(
     val wordForLearning: Word
 )
 
-class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAnswers: Int, private val nameOfTextFile: String) {
+class LearnWordsTrainer(
+    private val boundaryForLearnedWords: Int,
+    val countOfAnswers: Int,
+    private val nameOfTextFile: String
+) {
 
     private val dictionary = loadDictionary()
-    private var question: Question? = null
+    var question: Question? = null
 
     fun getStatistics(): Statistics {
         val quantityOfLearnedWords = dictionary.filter { it.countOfCorrectAnswer >= boundaryForLearnedWords }
@@ -83,3 +87,10 @@ class LearnWordsTrainer(private val boundaryForLearnedWords: Int, val countOfAns
 
     }
 }
+
+
+data class Word(
+    val original: String,
+    val translate: String,
+    var countOfCorrectAnswer: Int = 0,
+)

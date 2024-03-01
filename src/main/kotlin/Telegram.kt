@@ -7,6 +7,11 @@ fun main(args: Array<String>) {
     val updateIdRegex: Regex = "\"update_id\":(\\d+)".toRegex()
     val messageTextRegex: Regex = "\"text\":\"(.+?)\"".toRegex()
     val chatIdRegex: Regex = "\"chat\":\\{\"id\":(\\d+)".toRegex()
+    val dataRegex: Regex = "\"data\":\"(.+?)\"".toRegex()
+
+    val trainer = LearnWordsTrainer(3, 6, "words.txt")
+    val statistics = trainer.getStatistics()
+
 
     while (true) {
         Thread.sleep(2000)
@@ -27,7 +32,28 @@ fun main(args: Array<String>) {
         val groupsId = matchResultId?.groups
         val id = groupsId?.get(1)?.value
 
-        telegramBot.sendMessage(id, text)
+        val data = dataRegex.find(updates)?.groups?.get(1)?.value
+
+        if (text?.lowercase() == "/start" && id != null) {
+            telegramBot.sendMenu(id)
+        }
+        if (data?.lowercase() == CALLBACK_DATA_STATISTICS_BUTTON && id != null) {
+            telegramBot.sendMessage(
+                id,
+                "Выучено ${statistics.quantityOfLearnedWords.size} из ${statistics.dictionarySize} слов | ${statistics.percentsOfCorrectAnswers}%"
+            )
+        }
+        if (data?.lowercase() == CALLBACK_DATA_LEARN_BUTTON && id != null) {
+            telegramBot.checkNextQuestionAndSend(trainer, id)
+        }
+        if (data?.startsWith(CALLBACK_DATA_ANSWER_PREFIX) == true) {
+            val userAnswerIndex = data.substringAfter(CALLBACK_DATA_ANSWER_PREFIX).toInt()
+            if (trainer.checkUserAnswer(userAnswerIndex)) telegramBot.sendMessage(id, "Правильно!")
+            else telegramBot.sendMessage(
+                id,
+                "Неправильно! ${trainer.question?.wordForLearning?.original} - это ${trainer.question?.wordForLearning?.translate}"
+            )
+        }
 
     }
 

@@ -8,7 +8,7 @@ class TelegramBotService(private val botToken: String) {
 
     private val client: HttpClient = HttpClient.newBuilder().build()
 
-    fun getUpdate(updateId: Int): String {
+    fun getUpdate(updateId: Long): String {
         val urlGetUpdates = "$TELEGRAM_BOT_API_BASE_URL$botToken/getUpdates?offset=$updateId"
         val client = HttpClient.newBuilder().build()
         val request = HttpRequest.newBuilder().uri(URI.create(urlGetUpdates)).build()
@@ -17,7 +17,7 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    fun sendMessage(chatId: String?, textMessage: String?): String {
+    fun sendMessage(chatId: Long?, textMessage: String?): String {
         val encodedText = URLEncoder.encode(textMessage, Charsets.UTF_8)
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage?chat_id=$chatId&text=$encodedText"
         val request = HttpRequest.newBuilder().uri(URI.create(urlSendMessage)).build()
@@ -26,7 +26,7 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    fun sendMenu(chatId: String?): String {
+    fun sendMenu(chatId: Long?): String {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
         val sendMenuBody = """
             {
@@ -58,7 +58,7 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    private fun sendQuestion(chatId: String?, question: Question): String? {
+    private fun sendQuestion(chatId: Long?, question: Question): String? {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
         val answers =
             question.answers.mapIndexed { index, word -> """[{ "text": "${word.translate}", "callback_data": "$CALLBACK_DATA_ANSWER_PREFIX$index" }]""" }
@@ -84,7 +84,7 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    fun checkNextQuestionAndSend(trainer: LearnWordsTrainer, chatId: String?) {
+    fun checkNextQuestionAndSend(trainer: LearnWordsTrainer, chatId: Long?) {
         trainer.getNextQuestion()?.let { sendQuestion(chatId, it) } ?: sendMessage(chatId, "Вы выучили все слова!")
     }
 }

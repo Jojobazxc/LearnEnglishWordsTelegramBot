@@ -1,5 +1,12 @@
 import java.io.File
 
+
+data class Word(
+    val original: String,
+    val translate: String,
+    var countOfCorrectAnswer: Int = 0,
+)
+
 data class Statistics(
     val quantityOfLearnedWords: List<Word>,
     val dictionarySize: Int,
@@ -87,10 +94,3 @@ class LearnWordsTrainer(
 
     }
 }
-
-
-data class Word(
-    val original: String,
-    val translate: String,
-    var countOfCorrectAnswer: Int = 0,
-)

@@ -69,7 +69,6 @@ fun main(args: Array<String>) {
 
     var lastUpdateId = 0L
     val telegramBot = TelegramBotService(args[0])
-    val json = Json { ignoreUnknownKeys = true }
     val trainers = HashMap<Long, LearnWordsTrainer>()
 
     while (true) {
@@ -129,7 +128,3 @@ fun handleUpdate(
     }
 
 }
-
-
-
-

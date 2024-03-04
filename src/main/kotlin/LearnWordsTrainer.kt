@@ -23,8 +23,7 @@ class LearnWordsTrainer(
     private val nameOfTextFile: String = "words.txt",
     private val boundaryForLearnedWords: Int = 3,
     val countOfAnswers: Int = 4,
-
-    ) {
+) {
 
     private val dictionary = loadDictionary()
     var question: Question? = null

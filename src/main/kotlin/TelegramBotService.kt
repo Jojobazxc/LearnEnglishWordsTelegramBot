@@ -8,17 +8,18 @@ import java.net.http.HttpResponse
 class TelegramBotService(private val botToken: String) {
 
     private val client: HttpClient = HttpClient.newBuilder().build()
+    private val json = Json { ignoreUnknownKeys = true }
 
-    fun getUpdate(updateId: Long): String {
+    fun getUpdate(updateId: Long): Response {
         val urlGetUpdates = "$TELEGRAM_BOT_API_BASE_URL$botToken/getUpdates?offset=$updateId"
         val client = HttpClient.newBuilder().build()
         val request = HttpRequest.newBuilder().uri(URI.create(urlGetUpdates)).build()
         val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
-        return response.body()
+        return json.decodeFromString(response.body())
     }
 
-    fun sendMessage(json: Json, chatId: Long, textMessage: String): String {
+    fun sendMessage(chatId: Long, textMessage: String): Result<String> {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
         val requestBody = SendMessageRequest(
             chatId = chatId,
@@ -29,12 +30,14 @@ class TelegramBotService(private val botToken: String) {
             .header("Content-type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(requestBodyString))
             .build()
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-
-        return response.body()
+        return runCatching {
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+            response.body()
+            throw Exception("${response.statusCode()}")
+        }
     }
 
-    fun sendMenu(json: Json, chatId: Long): String {
+    fun sendMenu(chatId: Long): String {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
         val requestBody = SendMessageRequest(
             chatId = chatId,
@@ -61,7 +64,7 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    private fun sendQuestion(json: Json, chatId: Long, question: Question): String? {
+    private fun sendQuestion(chatId: Long, question: Question): String? {
         val urlSendMessage = "$TELEGRAM_BOT_API_BASE_URL$botToken/sendMessage"
         val requestBody = SendMessageRequest(
             chatId = chatId,
@@ -84,9 +87,8 @@ class TelegramBotService(private val botToken: String) {
         return response.body()
     }
 
-    fun checkNextQuestionAndSend(json: Json, trainer: LearnWordsTrainer, chatId: Long) {
-        trainer.getNextQuestion()?.let { sendQuestion(json, chatId, it) } ?: sendMessage(
-            json,
+    fun checkNextQuestionAndSend(trainer: LearnWordsTrainer, chatId: Long) {
+        trainer.getNextQuestion()?.let { sendQuestion(chatId, it) } ?: sendMessage(
             chatId,
             "Вы выучили все слова!"
         )

@@ -21,7 +21,7 @@
 ### Публикация и запуск
 
 1. Соберем shadowJar командой `./gradlew shadowJar`
-2. Копируем jar на наш VPS переименуя его одновременно в bot.jar: `scp build/libs/WordsTelegramBot-1.0-SNAPSHOT.jar root@100.100.100.100:/root/bot.jar`
+2. Копируем jar на наш VPS переименуя его одновременно в bot.jar: `scp build/libs/WordsTelegramBot-1.0-SNAPS HOT.jar root@100.100.100.100:/root/bot.jar`
 3. Копируем words.txt на VPS: `scp words.txt root@100.100.100.100:/root/words.txt`
 4. Подключиться к серверу по SSH используя команду `ssh root@100.100.100.100` и введя пароль
 5. Запустить бота в фоне командой `nohup java -jar bot.jar <ТОКЕН ТЕЛЕГРАМ> &`

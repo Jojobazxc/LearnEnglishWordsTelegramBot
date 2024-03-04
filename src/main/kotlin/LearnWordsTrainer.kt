@@ -24,7 +24,7 @@ class LearnWordsTrainer(
     private val boundaryForLearnedWords: Int = 3,
     val countOfAnswers: Int = 4,
 
-) {
+    ) {
 
     private val dictionary = loadDictionary()
     var question: Question? = null
@@ -98,7 +98,7 @@ class LearnWordsTrainer(
     }
 
     fun resetProgress() {
-        dictionary.forEach { it.countOfCorrectAnswer = 0}
+        dictionary.forEach { it.countOfCorrectAnswer = 0 }
         saveDictionary()
     }
 
